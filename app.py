@@ -14,6 +14,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 connect_db(app)
+
 db.create_all()
 
 app.config['SECRET_KEY'] = APP_CONFIG_KEY
@@ -79,28 +80,27 @@ def show_register_form():
         return render_template('register.html', form=form)
     
 
-@app.route('/login', methods=['GET', 'POST'])
-def show_login_form():
-    """Show log in form, handle request and make sure accountis authenticated."""
+
+
+@app.route('/login', methods=['GET','POST'])
+def user_login():
 
     form = UserForm()
 
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        user = User.authenticate(username, password)
 
+        user = User.authenticate(username, password)
         if user:
             session['user_id'] = user.id
-           
-            flash(f'Welcome back {username}!')
-            return redirect(f'/user/')
+            flash(f'Welcome back {username}!', 'info')
+            return redirect('/posts')
         else:
-            form.username.errors.append('Invalid username/password')
-            
+            form.username.errors = ['Incorrect username/password']
 
-    else:
-        return render_template('login.html', form=form)
+    
+    return render_template('login.html', form=form)
 
 
 
@@ -115,26 +115,26 @@ def show_weather_forms():
         return redirect('/')
 
     form = WeatherForm()
-    if session['date']:
-        weathers = Weather.query.filter_by(user_id=session['user_id'], date=session['date']).limit(2).all()
-    else:
-        weathers = Weather.query.filter_by(user_id=session['user_id']).limit(2).all()
+    l_weathers = Weather.query.filter_by(user_id=session['user_id'], column='left').all()
+    r_weathers = Weather.query.filter_by(user_id=session['user_id'], column='right').all()
+
 
     if form.validate_on_submit():
         address = form.location.data
         date = form.date.data
+        column = form.column.data
 
         weather = fetch_data(address,date)
 
-        new_weather = Weather(date=date, location=address, temperature=weather['temperature'], description=weather['description'], humidity=weather['humidity'], user_id=session['user_id'])
+        new_weather = Weather(date=date, location=address, temperature=weather['temperature'], description=weather['description'], humidity=weather['humidity'], user_id=session['user_id'], column=column)
 
-        session['date'] = date
         db.session.add(new_weather)
         db.session.commit()
         return redirect('/user')
 
     else:
-        return render_template('user.html', form=form, weathers=weathers)
+       
+        return render_template('user.html', form=form, l_weathers=l_weathers, r_weathers=r_weathers)
 
 
 

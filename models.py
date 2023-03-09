@@ -67,6 +67,7 @@ class Weather(db.Model):
     humidity = db.Column(db.Float, nullable=False)
     created = created = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    column = db.Column(db.String, nullable=False)
 
 
    
