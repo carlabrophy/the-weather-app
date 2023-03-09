@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+
+<!-- title -->
+{% block title %}Register{% endblock %}
+
+<!-- content -->
+{% block content %}
+<div class="container top-margin">
+	<h1>Welcome to Weather Planner!</h1>
+	<p>
+		Register below. Already have an account? Sign in <a href="/login">here.</a>
+	</p>
+	<form method="POST">
+		{{form.hidden_tag()}}
+
+		<!-- input -->
+		{% for field in form if field.widget.input_type != 'hidden' %}
+		<p>
+			{{field.label}} {{field}}
+
+			<!-- errors -->
+			{% for error in field.errors %}
+			<span class="text-danger">{{error}}</span>
+			{% endfor %}
+		</p>
+		{% endfor %}
+
+		<button type="submit" class="btn btn-success">Submit</button>
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'index.html' %}
+
+<!-- title -->
+{% block title %}User Page{% endblock %}
+
+<!-- body -->
+{% block content %}
+<div class="container top-margin">
+	<form method="POST">
+		{{form.hidden_tag()}}
+
+		<label for="table">Select which table:</label>
+		<select id="table" name="table">
+			<option value="left">Left</option>
+			<option value="right">Right</option>
+		</select>
+
+		<!-- input -->
+		{% for field in form if field.widget.input_type != 'hidden' %}
+		<p>{{field.label}} {{field}}</p>
+		{% endfor %}
+
+		<button type="Add" class="btn btn-success">Submit</button>
+	</form>
+
+	<div id="table-1">
+		<h3>Left</h3>
+		{% for w in weathers %}
+		<div>
+			<a href="/weather/{{w.id}}/edit">edit</a>
+			<a href="/weather/{{w.id}}/delete">delete</a>
+			<ul>
+				<li>{{w.location}}</li>
+				<li>{{w.date}}</li>
+				<li>{{w.description}}</li>
+				<li>{{w.temperature}}</li>
+				<li>{{w.humidity}}</li>
+			</ul>
+		</div>
+		{% endfor %}
+	</div>
+
+	<div id="table-2">
+		<h3>Right</h3>
+		{% for w in weathers %}
+		<div>
+			<a href="/weather/{{w.id}}/edit">edit</a>
+			<a href="/weather/{{w.id}}/delete">delete</a>
+			<ul>
+				<li>{{w.location}}</li>
+				<li>{{w.date}}</li>
+				<li>{{w.description}}</li>
+				<li>{{w.temperature}}</li>
+				<li>{{w.humidity}}</li>
+			</ul>
+		</div>
+		{% endfor %}
+	</div>
+
+	<!-- <a href="/user" class="btn-sm btn-warning">+</a> -->
+</div>
+
+{% endblock %}

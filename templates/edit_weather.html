@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+<!-- title -->
+{% block title %}User Planner{% endblock %}
+
+<!-- content -->
+{% block content %}
+<div class="container top-margin">
+	<form method="POST">
+		{{form.hidden_tag()}}
+
+		<!-- input -->
+		{% for field in form if field.widget.input_type != 'hidden' %}
+		<p>{{field.label}} {{field}}</p>
+		{% endfor %}
+
+		<button type="Save" class="btn btn-success">Submit</button>
+	</form>
+
+	{% endblock %}
+</div>
