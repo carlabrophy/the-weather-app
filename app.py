@@ -72,7 +72,7 @@ def show_register_form():
             form.username.errors.append('Username is not available.')
             return render_template('register.html', form=form)
         
-        #add the user_id in the seesion right away so user don't have to log in again after registering on the account.
+        
         session['user_id'] = new_user.id
         flash(f'Welcome {username}! Your account has been created.', 'success')
         return redirect(f'/user')
@@ -95,7 +95,7 @@ def user_login():
         if user:
             session['user_id'] = user.id
             flash(f'Welcome back {username}!', 'info')
-            return redirect('/posts')
+            return redirect('/user')
         else:
             form.username.errors = ['Incorrect username/password']
 
@@ -117,7 +117,6 @@ def show_weather_forms():
     form = WeatherForm()
     l_weathers = Weather.query.filter_by(user_id=session['user_id'], column='left').all()
     r_weathers = Weather.query.filter_by(user_id=session['user_id'], column='right').all()
-
 
     if form.validate_on_submit():
         address = form.location.data
@@ -174,8 +173,10 @@ def delete_weather(id):
     """delete a weather"""
     w = Weather.query.get_or_404(id)
 
+
     db.session.delete(w)
     db.session.commit()
+    flash(f'{w.location } dated: {w.date} deleted!', 'danger')
 
     return redirect('/user')
 
