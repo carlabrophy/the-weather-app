@@ -5,57 +5,96 @@
 
 <!-- body -->
 {% block content %}
-<div class="container top-margin">
-	<form method="POST">
-		{{form.hidden_tag()}}
+<div class="container top-margin user-container">
+	<div class="row">
+		<div class="col-md-6">
+			<h3>How it works:</h3>
+			<ul>
+				<li>Choose which side of the table.</li>
+				<li>Enter the location and then date.</li>
+				<li>
+					Hit Add and weathe details will show on the chosen side of the
+					dashboard.
+				</li>
+			</ul>
+			<p>
+				*Please note that the we can only generate up to 5 days of weather
+				forecast counting from tomorrow's date on any location for now.
+			</p>
+		</div>
+		<div class="col-md-6">
+			<form id="form-user" method="POST">
+				{{form.hidden_tag()}}
 
-		<!-- input -->
-		{% for field in form if field.widget.input_type != 'hidden' %}
-		<p>{{field.label}} {{field}}</p>
-		{% endfor %}
+				<!-- input -->
+				{% for field in form if field.widget.input_type != 'hidden' %}
+				<p id="input-weather">
+					{{field.label(class_='form-label ')}} {{field(class_='form-control
+					input-user')}}
 
-		<button type="Add" class="btn btn-success">Submit</button>
-	</form>
+					<!-- errors -->
+					{% for error in field.errors %}
+					<span class="text-danger">{{error}}</span>
+					{% endfor %}
+				</p>
 
-	<div class="row g3">
-		<div class="col-md-6"><h3>Left</h3></div>
-		<div class="col-md-6"><h3>Right</h3></div>
+				{% endfor %}
 
-		<div id="table-1" class="col-md-6">
+				<button type="Add" class="btn btn-success">Add</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6 column">
+			<h3 class="column-left">
+				Business Travel <i class="fas fa-edit h3-fa"></i>
+			</h3>
+		</div>
+		<div class="col-md-6 column">
+			<h3 class="column-right">Home <i class="fas fa-edit h3-fa"></i></h3>
+		</div>
+
+		<div class="col-md-6">
 			{% for w in l_weathers%}
-			<div>
-				<a href="/weather/{{w.id}}/edit">edit</a>
-				<a href="/weather/{{w.id}}/delete">delete</a>
-				<ul>
-					<li>{{w.location}}</li>
-					<li>{{w.date}}</li>
-					<li>{{w.description}}</li>
-					<li>{{w.temperature}}</li>
-					<li>{{w.humidity}}</li>
-					<li>{{w.column}}</li>
-				</ul>
+			<div class="weather">
+				<div class="card" style="width: 18rem">
+					<p class="card-img-top align-left">{{w.date}}</p>
+					<p class="card-img-top align-right">{{w.location}}</p>
+					<div class="card-body">
+						<h5 class="card-title">{{w.temperature}} <span>&#176;</span></h5>
+						<p class="card-text">Humidity: {{w.humidity}}%</p>
+						<a href="/weather/{{w.id}}/edit" class="btn btn-ptimary"
+							><i class="fas fa-edit"></i
+						></a>
+						<a href="/weather/{{w.id}}/delete" class="btn btn-ptimary"
+							><i class="fa-sharp fa-solid fa-trash"></i
+						></a>
+					</div>
+				</div>
 			</div>
 			{% endfor%}
 		</div>
-
-		<div id="table-2" class="col-md-6">
+		<div class="col-md-6">
 			{% for w in r_weathers%}
-			<div>
-				<a href="/weather/{{w.id}}/edit">edit</a>
-				<a href="/weather/{{w.id}}/delete">delete</a>
-				<ul>
-					<li>{{w.location}}</li>
-					<li>{{w.date}}</li>
-					<li>{{w.description}}</li>
-					<li>{{w.temperature}}</li>
-					<li>{{w.humidity}}</li>
-				</ul>
+			<div class="weather">
+				<div class="card" style="width: 18rem">
+					<p class="card-img-top align-left">{{w.date}}</p>
+					<p class="card-img-top align-right">{{w.location}}</p>
+					<div class="card-body">
+						<h5 class="card-title">{{w.temperature}} <span>&#176;</span></h5>
+						<p class="card-text">Humidity: {{w.humidity}}%</p>
+						<a href="/weather/{{w.id}}/edit" class="btn btn-ptimary"
+							><i class="fas fa-edit"></i
+						></a>
+						<a href="/weather/{{w.id}}/delete" class="btn btn-ptimary"
+							><i class="fa-sharp fa-solid fa-trash"></i
+						></a>
+					</div>
+				</div>
 			</div>
-			{% endfor %}
+			{% endfor%}
 		</div>
-
-		<!-- <a href="/user" class="btn-sm btn-warning">+</a> -->
 	</div>
-
-	{% endblock %}
 </div>
+{% endblock %}

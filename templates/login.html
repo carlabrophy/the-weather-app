@@ -5,9 +5,9 @@
 
 <!-- content -->
 {% block content %}
-<div class="container top-margin">
+<div class="container top-margin reg-div">
 	<h1>Welcome to Weather Planner!</h1>
-	<p>
+	<p class="login-msg">
 		Log in below. Don't have an account yet? Register
 		<a href="/register">here.</a>
 	</p>
@@ -17,7 +17,8 @@
 		<!-- input -->
 		{% for field in form if field.widget.input_type != 'hidden' %}
 		<p>
-			{{field.label}} {{field}}
+			{{field.label(class_="form-label")}} {{field(class_="form-control
+			form-input")}}
 
 			<!-- errors -->
 			{% for error in field.errors %}
@@ -26,7 +27,7 @@
 		</p>
 		{% endfor %}
 
-		<button type="submit" class="btn btn-success">Submit</button>
+		<button type="submit" class="btn btn-success reg-btn">Submit</button>
 	</form>
 </div>
 

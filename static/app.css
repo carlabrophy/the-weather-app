@@ -1,11 +1,95 @@
+* {
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #e0dcdc;
+	margin-bottom: 200px;
+}
+
 .top-margin {
 	margin-top: 100px;
 }
 
+/* index */
+.home-page {
+	margin: 25% 0 0 10%;
+	width: 35%;
+}
+
+.home-page p {
+	font-size: 1rem;
+}
+
+.sign-up {
+	margin-left: 2%;
+}
+
+/* login/register */
 .home-div {
 	margin: 10% 0 0 10%;
 }
 
 .home-div p {
 	margin-bottom: 30px;
+}
+
+.reg-div {
+	margin: 100px 0 0 10%;
+	width: 35%;
+}
+
+.login-msg {
+	font-size: 1rem;
+}
+
+.flash-msg {
+	margin-top: 50px;
+}
+
+.f-msg {
+	font-size: 1.2rem;
+}
+
+/* user */
+
+.user-container {
+	margin: 10% 10% 0 10%;
+}
+
+.input-user {
+	width: 80%;
+}
+
+.column {
+	margin: 50px 0;
+}
+
+.h3-fa {
+	font-size: small;
+	font-weight: 400;
+}
+
+.weather {
+	margin-bottom: 10px;
+}
+
+.card-img-top {
+	font-size: 1.2rem;
+
+	padding-right: 30px;
+}
+
+.align-right {
+	text-align: right;
+}
+
+.align-left {
+	margin: 20px 0 0 0;
+	padding-left: 20px;
+}
+
+.card-title {
+	font-size: 1.8rem;
 }

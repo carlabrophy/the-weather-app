@@ -14,7 +14,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 connect_db(app)
-
 db.create_all()
 
 app.config['SECRET_KEY'] = APP_CONFIG_KEY
@@ -40,10 +39,11 @@ def fetch_data(location, date_input):
 
         if date == date_input:
             temp = daily['values']['temperatureAvg']
-            description = daily['values']['weatherCodeMax']
+            sunrise = daily['values']['sunriseTime']
+            sunset = daily['values']['sunsetTime']
             humidity = daily['values']['humidityAvg']
 
-            new_weather = {'temperature': temp, 'description': description, 'humidity': humidity}
+            new_weather = {'temperature': temp, 'sunrise':sunrise, 'sunset':sunset, 'humidity': humidity}
             return new_weather
         
     
@@ -94,7 +94,7 @@ def user_login():
         user = User.authenticate(username, password)
         if user:
             session['user_id'] = user.id
-            flash(f'Welcome back {username}!', 'info')
+            flash(f'Welcome back {username}!', 'success')
             return redirect('/user')
         else:
             form.username.errors = ['Incorrect username/password']
@@ -121,21 +121,25 @@ def show_weather_forms():
     if form.validate_on_submit():
         address = form.location.data
         date = form.date.data
+        # if date == "":
+        #     form.date.errors.append('Invalid date')
         column = form.column.data
 
-        weather = fetch_data(address,date)
-
-        new_weather = Weather(date=date, location=address, temperature=weather['temperature'], description=weather['description'], humidity=weather['humidity'], user_id=session['user_id'], column=column)
-
-        db.session.add(new_weather)
-        db.session.commit()
-        return redirect('/user')
+        try:
+            date_format = datetime.datetime.strptime(f"2023-{date}", "%Y-%m-%d")
+            new_date = date_format.strftime('%a %w/%d')
+            weather = fetch_data(address,date)
+            new_weather = Weather(date=new_date, location=address.capitalize(), temperature=weather['temperature'], sunrise=weather['sunrise'], sunset=weather['sunset'], humidity=weather['humidity'], user_id=session['user_id'], column=column)
+            db.session.add(new_weather)
+            db.session.commit()
+            return redirect('/user')
+        except ValueError:
+            form.date.errors.append('Invalid date')
+            return render_template('user.html', form=form,l_weathers=l_weathers, r_weathers=r_weathers) 
+        
 
     else:
-       
         return render_template('user.html', form=form, l_weathers=l_weathers, r_weathers=r_weathers)
-
-
 
 
 
@@ -176,7 +180,7 @@ def delete_weather(id):
 
     db.session.delete(w)
     db.session.commit()
-    flash(f'{w.location } dated: {w.date} deleted!', 'danger')
+    flash(f'{w.date} in {w.location} deleted!', 'danger')
 
     return redirect('/user')
 
