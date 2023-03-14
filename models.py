@@ -49,6 +49,11 @@ class User(db.Model):
         else:
             return False
 
+    @property
+    def curr_date(self):
+        """Return nicely-formatted date."""
+
+        return self.created.strftime("%m-%d")
 
     
 
@@ -70,5 +75,11 @@ class Weather(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     column = db.Column(db.String, nullable=False)
 
+
+    @property
+    def created_date(self):
+        """Return nicely-formatted date."""
+
+        return self.created.strftime("%m-%d")
 
    

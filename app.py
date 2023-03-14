@@ -94,6 +94,7 @@ def user_login():
         user = User.authenticate(username, password)
         if user:
             session['user_id'] = user.id
+            session['login_time'] = user.curr_date
             flash(f'Welcome back {username}!', 'success')
             return redirect('/user')
         else:
