@@ -13,23 +13,24 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
+
 connect_db(app)
 db.create_all()
+
 
 app.config['SECRET_KEY'] = APP_CONFIG_KEY
 debug = DebugToolbarExtension(app)
 
 
-BASE_URL = f"https://api.tomorrow.io/v4/weather/forecast?"
-headers = {"accept": "application/json"}
+# BASE_URL = f"https://api.tomorrow.io/v4/weather/forecast?"
+# headers = {"accept": "application/json"}
 
 # params={'key': API_SECRET_KEY, 'location': '', 'timesteps': '1d', 'units': 'imperial'}
 
 
 
 def fetch_data(location, date_input):
-    loc = location
-    response = requests.get(BASE_URL, headers=headers, params={'location': loc, 'timesteps': '1d', 'units': 'imperial', 'apikey': API_SECRET_KEY})
+    response = requests.get(f"https://api.tomorrow.io/v4/weather/forecast?location={location}&timesteps=1d&units=imperial&apikey={API_SECRET_KEY}")
 
     data = response.json()
 
@@ -119,11 +120,11 @@ def show_weather_forms():
     l_weathers = Weather.query.filter_by(user_id=session['user_id'], column='left').all()
     r_weathers = Weather.query.filter_by(user_id=session['user_id'], column='right').all()
 
+    u = User.query.get_or_404(session['user_id'])
+    
     if form.validate_on_submit():
         address = form.location.data
         date = form.date.data
-        # if date == "":
-        #     form.date.errors.append('Invalid date')
         column = form.column.data
 
         try:
@@ -131,16 +132,17 @@ def show_weather_forms():
             new_date = date_format.strftime('%a %w/%d')
             weather = fetch_data(address,date)
             new_weather = Weather(date=new_date, location=address.capitalize(), temperature=weather['temperature'], sunrise=weather['sunrise'], sunset=weather['sunset'], humidity=weather['humidity'], user_id=session['user_id'], column=column)
+
             db.session.add(new_weather)
             db.session.commit()
             return redirect('/user')
         except ValueError:
             form.date.errors.append('Invalid date')
-            return render_template('user.html', form=form,l_weathers=l_weathers, r_weathers=r_weathers) 
+            return render_template('user.html', form=form,l_weathers=l_weathers, r_weathers=r_weathers, u=u) 
         
 
     else:
-        return render_template('user.html', form=form, l_weathers=l_weathers, r_weathers=r_weathers)
+        return render_template('user.html', form=form, l_weathers=l_weathers, r_weathers=r_weathers, u=u)
 
 
 
