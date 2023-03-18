@@ -1,2 +1,2 @@
-APP_CONFIG_KEY  = 'djg*ed74gwgdfkds'
+
 API_SECRET_KEY= '0h9Lia0Qot6HvrR0PY4lus80MuBVtHpP'
