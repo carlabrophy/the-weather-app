@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, flash, session
 from models import db, connect_db, User, Weather
 from forms import UserForm, WeatherForm
 from flask_debugtoolbar import DebugToolbarExtension
-from secret import API_SECRET_KEY, APP_CONFIG_KEY
+from secret import API_SECRET_KEY
 from sqlalchemy.exc import IntegrityError
 import requests, datetime, os
 
@@ -15,15 +15,13 @@ if uri.startswith("postgres://"):
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'cassie654321')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'cassie654321213')
 
 
 connect_db(app)
 db.create_all()
 
 
-
-debug = DebugToolbarExtension(app)
 
 
 # BASE_URL = f"https://api.tomorrow.io/v4/weather/forecast?"
