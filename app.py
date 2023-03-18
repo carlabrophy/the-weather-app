@@ -8,7 +8,7 @@ import requests, datetime, os
 
 
 app = Flask(__name__)
-uri = os.environ.get('DATABASE_URL', 'postgresql:///auth_demo')
+uri = os.environ.get('DATABASE_URL', 'postgresql:///weather_planner_db')
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 
